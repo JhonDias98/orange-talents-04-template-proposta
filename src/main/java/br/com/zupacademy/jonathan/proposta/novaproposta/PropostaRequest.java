@@ -24,7 +24,7 @@ public class PropostaRequest {
 	@NotNull
 	@Positive
 	private BigDecimal salario;
-	
+
 	public PropostaRequest(@NotBlank String documento, @NotBlank @Email String email, @NotBlank String nome,
 			@NotBlank String endereco, @NotNull @Positive BigDecimal salario) {
 		this.documento = documento;
@@ -33,9 +33,29 @@ public class PropostaRequest {
 		this.endereco = endereco;
 		this.salario = salario;
 	}
-	
+
+	public String getDocumento() {
+		return documento;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public String getEndereco() {
+		return endereco;
+	}
+
+	public BigDecimal getSalario() {
+		return salario;
+	}
+
 	public Proposta toModel() {
 		return new Proposta(documento, email, nome, endereco, salario);
 	}
-	
+
 }
