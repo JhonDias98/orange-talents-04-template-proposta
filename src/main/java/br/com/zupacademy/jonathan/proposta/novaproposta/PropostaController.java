@@ -16,12 +16,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import br.com.zupacademy.jonathan.proposta.novaproposta.analise.AnaliseClient;
+import br.com.zupacademy.jonathan.proposta.novaproposta.analise.AnaliseRequest;
+import br.com.zupacademy.jonathan.proposta.utils.ExecutorTransacao;
+import feign.FeignException;
+
 @RestController
 @RequestMapping("/propostas")
 public class PropostaController {
 
 	@Autowired
 	private PropostaRepository repository;
+	
+	@Autowired
+	private AnaliseClient analiseClient;
+	
+	@Autowired
+	private ExecutorTransacao executorTransacao;
 	
 	private final Logger logger = LoggerFactory.getLogger(PropostaController.class);
 	
@@ -35,10 +46,26 @@ public class PropostaController {
 		}
 		
 		Proposta proposta = request.toModel();
-		repository.save(proposta);
-		logger.info("Proposta documento={} salário={} criada com sucesso!", proposta.getDocumento(), proposta.getSalario());
 		
-		URI uri = uriBuilder.path("propostas/{id}").build(proposta.getId());
+		executorTransacao.salvaEComita(proposta);
+		consultaFinanceira(proposta);
+		executorTransacao.atualizaEComita(proposta);
+		
+		logger.info("Proposta documento={} salário={} criada com sucesso!", proposta.getDocumento(), proposta.getSalario());
+		URI uri = uriBuilder.path("/propostas/{id}").buildAndExpand(proposta.getId()).toUri();
         return ResponseEntity.created(uri).build();
 	}
+	
+	public void consultaFinanceira(Proposta proposta){
+        PropostaStatus status;
+        try{
+            logger.info("Enviando proposta {} para analise financeira", proposta.getId());
+            analiseClient.consulta(new AnaliseRequest(proposta));
+            status = PropostaStatus.ELEGIVEL;
+        }catch (FeignException.UnprocessableEntity e){
+            logger.error("Proposta numero {} com restrição financeira.", proposta.getId());
+            status = PropostaStatus.NAO_ELEGIVEL;
+        }
+        proposta.colocarStatusDaAnalise(status);
+    }
 }
