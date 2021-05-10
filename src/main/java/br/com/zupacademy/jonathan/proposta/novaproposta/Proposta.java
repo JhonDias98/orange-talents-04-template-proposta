@@ -13,6 +13,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
+import br.com.zupacademy.jonathan.proposta.cartao.CartaoAnaliseRequest;
+
 @Entity
 public class Proposta {
 
@@ -33,6 +35,7 @@ public class Proposta {
 	private BigDecimal salario;
 	@Enumerated(EnumType.STRING)
     private PropostaStatus status = PropostaStatus.NAO_ANALISADO;
+	private String numeroCartao;
 	
 	public Proposta(@NotBlank String documento, @NotBlank @Email String email, @NotBlank String nome,
 			@NotBlank String endereco, @NotNull @Positive BigDecimal salario) {
@@ -76,6 +79,14 @@ public class Proposta {
 
 	public void colocarStatusDaAnalise(PropostaStatus status) {
 		this.status = status;
+	}
+	
+	public CartaoAnaliseRequest toRequest() {
+		return new CartaoAnaliseRequest(documento, nome, id.toString());
+	}
+
+	public void setNumeroCartao(String numeroCartao) {
+		this.numeroCartao = numeroCartao;
 	}
 
 }
