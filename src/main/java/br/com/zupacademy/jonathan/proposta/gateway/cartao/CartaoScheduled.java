@@ -1,4 +1,4 @@
-package br.com.zupacademy.jonathan.proposta.cartao;
+package br.com.zupacademy.jonathan.proposta.gateway.cartao;
 
 import java.util.List;
 
@@ -39,14 +39,13 @@ public class CartaoScheduled {
 		
 		try {
 			for(Proposta proposta : propostas) {
-				CartaoAnaliseRequest cartaoAnalise = proposta.toRequest();
-				Cartao novoCartao = cartaoClient.gerarCartao(cartaoAnalise);
-				proposta.setNumeroCartao(novoCartao.getId());
+				CartaoResponse cartaoAnalise = cartaoClient.consultaCartao(proposta.getId());
+				proposta.setNumeroCartao(cartaoAnalise.getId());
 				propostaRepository.save(proposta);
 				logger.info("Cartão criado para a proposta={}", proposta.getId());
 			}
-		} catch (FeignException.UnprocessableEntity e){
-			e.printStackTrace();
+		} catch (FeignException e){
+			logger.error("Cartão ainda não está disponível. Erro={}", e.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 	     }		

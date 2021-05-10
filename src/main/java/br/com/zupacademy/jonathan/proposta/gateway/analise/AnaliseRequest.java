@@ -1,4 +1,4 @@
-package br.com.zupacademy.jonathan.proposta.novaproposta.analise;
+package br.com.zupacademy.jonathan.proposta.gateway.analise;
 
 import br.com.zupacademy.jonathan.proposta.novaproposta.Proposta;
 

@@ -13,7 +13,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
-import br.com.zupacademy.jonathan.proposta.cartao.CartaoAnaliseRequest;
+//import br.com.zupacademy.jonathan.proposta.cartao.CartaoAnaliseRequest;
 
 @Entity
 public class Proposta {
@@ -81,9 +81,9 @@ public class Proposta {
 		this.status = status;
 	}
 	
-	public CartaoAnaliseRequest toRequest() {
-		return new CartaoAnaliseRequest(documento, nome, id.toString());
-	}
+//	public CartaoAnaliseRequest toRequest() {
+//		return new CartaoAnaliseRequest(documento, nome, id.toString());
+//	}
 
 	public void setNumeroCartao(String numeroCartao) {
 		this.numeroCartao = numeroCartao;

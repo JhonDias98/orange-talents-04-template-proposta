@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.zupacademy.jonathan.proposta.novaproposta.analise.AnaliseClient;
-import br.com.zupacademy.jonathan.proposta.novaproposta.analise.AnaliseRequest;
+import br.com.zupacademy.jonathan.proposta.gateway.analise.AnaliseClient;
+import br.com.zupacademy.jonathan.proposta.gateway.analise.AnaliseRequest;
 import br.com.zupacademy.jonathan.proposta.utils.ExecutorTransacao;
 import feign.FeignException;
 
