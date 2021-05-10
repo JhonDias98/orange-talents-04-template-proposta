@@ -1,6 +1,7 @@
 package br.com.zupacademy.jonathan.proposta.novaproposta;
 
 import java.net.URI;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -10,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +38,18 @@ public class PropostaController {
 	private ExecutorTransacao executorTransacao;
 	
 	private final Logger logger = LoggerFactory.getLogger(PropostaController.class);
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<PropostaResponse> consultarProposta(@PathVariable Long id) {
+		Optional<Proposta> possivelProposta =  repository.findById(id);
+		
+		if(possivelProposta.isPresent()) {
+			return ResponseEntity.ok(new PropostaResponse(possivelProposta.get()));
+		}
+        return possivelProposta.map(
+                proposta -> ResponseEntity.ok(new PropostaResponse(proposta)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
+	}
 	
 	@PostMapping
 	@Transactional

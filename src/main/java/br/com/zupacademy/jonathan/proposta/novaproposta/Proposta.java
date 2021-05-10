@@ -89,4 +89,8 @@ public class Proposta {
 		this.numeroCartao = numeroCartao;
 	}
 
+	public String getNumeroCartao() {
+		return numeroCartao;
+	}
+
 }
