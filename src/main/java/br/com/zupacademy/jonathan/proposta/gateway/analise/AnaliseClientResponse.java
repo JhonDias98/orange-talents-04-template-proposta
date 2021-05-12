@@ -1,13 +1,13 @@
 package br.com.zupacademy.jonathan.proposta.gateway.analise;
 
-public class AnaliseResponse {
+public class AnaliseClientResponse {
 
 	private String documento;
 	private String nome;
 	private AnaliseStatus resultadoAnalise;
 	private Long idProposta;
 
-	public AnaliseResponse(String documento, String nome, AnaliseStatus resultadoAnalise, Long idProposta) {
+	public AnaliseClientResponse(String documento, String nome, AnaliseStatus resultadoAnalise, Long idProposta) {
 		this.documento = documento;
 		this.nome = nome;
 		this.resultadoAnalise = resultadoAnalise;

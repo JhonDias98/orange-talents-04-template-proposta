@@ -8,5 +8,5 @@ public interface PropostaRepository extends JpaRepository<Proposta, Long>{
 
 	boolean existsByDocumento(String documento);
 	
-	List<Proposta> findByStatusAndNumeroCartaoIsNull(PropostaStatus status);
+	List<Proposta> findByStatusAndCartaoIsNull(PropostaStatus status);
 }

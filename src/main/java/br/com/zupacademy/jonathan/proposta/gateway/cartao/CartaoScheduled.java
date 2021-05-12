@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import br.com.zupacademy.jonathan.proposta.cartao.Cartao;
 import br.com.zupacademy.jonathan.proposta.novaproposta.Proposta;
 import br.com.zupacademy.jonathan.proposta.novaproposta.PropostaRepository;
 import br.com.zupacademy.jonathan.proposta.novaproposta.PropostaStatus;
@@ -29,7 +30,7 @@ public class CartaoScheduled {
 	@Scheduled(fixedDelayString = "${periodicidade.executa-operacao}")
 	@Transactional
     private void executaOperacao() {
-		List<Proposta> propostas = propostaRepository.findByStatusAndNumeroCartaoIsNull(PropostaStatus.ELEGIVEL);
+		List<Proposta> propostas = propostaRepository.findByStatusAndCartaoIsNull(PropostaStatus.ELEGIVEL);
 		
 		if(propostas.isEmpty()) {
 			logger.info("Não temos propostas elegíveis");
@@ -39,8 +40,9 @@ public class CartaoScheduled {
 		
 		try {
 			for(Proposta proposta : propostas) {
-				CartaoResponse cartaoAnalise = cartaoClient.consultaCartao(proposta.getId());
-				proposta.setNumeroCartao(cartaoAnalise.getId());
+				CartaoClientResponse cartaoAnalise = cartaoClient.consultaCartao(proposta.getId());
+				Cartao novoCartao = cartaoAnalise.toModel();
+				proposta.setCartao(novoCartao);
 				propostaRepository.save(proposta);
 				logger.info("Cartão criado para a proposta={}", proposta.getId());
 			}

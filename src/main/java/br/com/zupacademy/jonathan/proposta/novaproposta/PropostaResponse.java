@@ -20,11 +20,13 @@ public class PropostaResponse {
 		this.id = proposta.getId();
 		this.documento = proposta.getDocumento();
 		this.email = proposta.getEmail();
-		this.nome = proposta.getEmail();
+		this.nome = proposta.getNome();
 		this.endereco = proposta.getEndereco();
 		this.salario = proposta.getSalario();
 		this.status = proposta.getStatus();
-		this.numeroCartao = proposta.getNumeroCartao();
+		if(!(proposta.getCartao() == null)) {
+			this.numeroCartao = proposta.getCartao().getNumero();
+		}
 	}
 
 	public Long getId() {

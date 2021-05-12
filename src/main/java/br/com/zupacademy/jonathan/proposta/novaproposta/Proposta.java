@@ -2,18 +2,22 @@ package br.com.zupacademy.jonathan.proposta.novaproposta;
 
 import java.math.BigDecimal;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
-//import br.com.zupacademy.jonathan.proposta.cartao.CartaoAnaliseRequest;
+import br.com.zupacademy.jonathan.proposta.cartao.Cartao;
+import br.com.zupacademy.jonathan.proposta.utils.ofuscador.OfuscadorEncryptors;
 
 @Entity
 public class Proposta {
@@ -22,6 +26,7 @@ public class Proposta {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@NotBlank
+	@Convert(converter = OfuscadorEncryptors.class)
 	private String documento;
 	@NotBlank
 	@Email
@@ -35,7 +40,8 @@ public class Proposta {
 	private BigDecimal salario;
 	@Enumerated(EnumType.STRING)
     private PropostaStatus status = PropostaStatus.NAO_ANALISADO;
-	private String numeroCartao;
+	@OneToOne(cascade = CascadeType.MERGE)
+	private Cartao cartao;
 	
 	public Proposta(@NotBlank String documento, @NotBlank @Email String email, @NotBlank String nome,
 			@NotBlank String endereco, @NotNull @Positive BigDecimal salario) {
@@ -46,6 +52,10 @@ public class Proposta {
 		this.salario = salario;
 	}
 	
+	public Proposta(String documento) {
+		this.documento = documento;
+	}
+
 	@Deprecated
 	public Proposta() {}
 
@@ -80,17 +90,13 @@ public class Proposta {
 	public void colocarStatusDaAnalise(PropostaStatus status) {
 		this.status = status;
 	}
-	
-//	public CartaoAnaliseRequest toRequest() {
-//		return new CartaoAnaliseRequest(documento, nome, id.toString());
-//	}
 
-	public void setNumeroCartao(String numeroCartao) {
-		this.numeroCartao = numeroCartao;
+	public Cartao getCartao() {
+		return cartao;
 	}
 
-	public String getNumeroCartao() {
-		return numeroCartao;
+	public void setCartao(Cartao cartao) {
+		this.cartao = cartao;
 	}
 
 }

@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.zupacademy.jonathan.proposta.gateway.analise.AnaliseClient;
-import br.com.zupacademy.jonathan.proposta.gateway.analise.AnaliseRequest;
+import br.com.zupacademy.jonathan.proposta.gateway.analise.AnaliseClientRequest;
 import br.com.zupacademy.jonathan.proposta.utils.ExecutorTransacao;
 import feign.FeignException;
 
@@ -75,7 +75,7 @@ public class PropostaController {
         PropostaStatus status;
         try{
             logger.info("Enviando proposta {} para analise financeira", proposta.getId());
-            analiseClient.consulta(new AnaliseRequest(proposta));
+            analiseClient.consulta(new AnaliseClientRequest(proposta));
             status = PropostaStatus.ELEGIVEL;
         }catch (FeignException.UnprocessableEntity e){
             logger.error("Proposta numero {} com restrição financeira.", proposta.getId());

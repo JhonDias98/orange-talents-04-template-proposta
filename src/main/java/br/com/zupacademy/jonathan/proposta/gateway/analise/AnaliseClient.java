@@ -8,5 +8,5 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public interface AnaliseClient {
 
 	@RequestMapping(method = RequestMethod.POST, produces = "application/json")
-	AnaliseResponse consulta(AnaliseRequest request);
+	AnaliseClientResponse consulta(AnaliseClientRequest request);
 }
