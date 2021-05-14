@@ -41,7 +41,7 @@ public class CartaoScheduled {
 		try {
 			for(Proposta proposta : propostas) {
 				CartaoClientResponse cartaoAnalise = cartaoClient.consultaCartao(proposta.getId());
-				Cartao novoCartao = cartaoAnalise.toModel();
+				Cartao novoCartao = cartaoAnalise.toModel(proposta);
 				proposta.setCartao(novoCartao);
 				propostaRepository.save(proposta);
 				logger.info("Cartão criado para a proposta={}", proposta.getId());

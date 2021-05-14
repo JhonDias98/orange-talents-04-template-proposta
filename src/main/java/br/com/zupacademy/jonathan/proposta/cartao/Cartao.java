@@ -1,5 +1,8 @@
 package br.com.zupacademy.jonathan.proposta.cartao;
 
+import java.time.LocalDateTime;
+import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -7,11 +10,14 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import br.com.zupacademy.jonathan.proposta.biometria.Biometria;
 import br.com.zupacademy.jonathan.proposta.bloqueio.Bloqueio;
+import br.com.zupacademy.jonathan.proposta.novaproposta.Proposta;
 
 @Entity
 public class Cartao {
@@ -24,21 +30,30 @@ public class Cartao {
 	@NotBlank
 	private String titular;
 	@NotNull
-	private String idProposta;
+    private LocalDateTime emitidoEm;
+	@NotNull
+	@OneToOne
+    private Proposta proposta;
+	@OneToMany(mappedBy = "cartao")
+    private Set<Biometria> biometrias;
 	@OneToOne(mappedBy = "cartao", cascade = CascadeType.MERGE)
     private Bloqueio bloqueio;
     @Enumerated(value = EnumType.STRING)
     private CartaoStatus status = CartaoStatus.ATIVO;
 	
-	public Cartao(@NotBlank String numero, @NotBlank String titular, @NotNull String idProposta) {
+	
+	
+	public Cartao(@NotBlank String numero, @NotBlank String titular, @NotNull LocalDateTime emitidoEm,
+			@NotNull Proposta proposta) {
 		this.numero = numero;
 		this.titular = titular;
-		this.idProposta = idProposta;
+		this.emitidoEm = emitidoEm;
+		this.proposta = proposta;
 	}
-	
+
 	@Deprecated
 	public Cartao() {}
-
+	
 	public Long getId() {
 		return id;
 	}
@@ -51,8 +66,16 @@ public class Cartao {
 		return titular;
 	}
 
-	public String getIdProposta() {
-		return idProposta;
+	public LocalDateTime getEmitidoEm() {
+		return emitidoEm;
+	}
+
+	public Proposta getProposta() {
+		return proposta;
+	}
+
+	public Set<Biometria> getBiometrias() {
+		return biometrias;
 	}
 
 	public Bloqueio getBloqueio() {
@@ -62,7 +85,7 @@ public class Cartao {
 	public CartaoStatus getStatus() {
 		return status;
 	}
-	
+
 	public boolean verificarSeCartaoEstaBloqueado(){
         return this.status.equals(CartaoStatus.BLOQUEADO);
     }

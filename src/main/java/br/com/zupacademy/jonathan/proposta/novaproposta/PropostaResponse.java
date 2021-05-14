@@ -5,6 +5,8 @@ import java.math.BigDecimal;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import br.com.zupacademy.jonathan.proposta.cartao.CartaoResponse;
+
 public class PropostaResponse {
 
 	private Long id;
@@ -14,7 +16,7 @@ public class PropostaResponse {
 	private String endereco;
 	private BigDecimal salario;
 	private PropostaStatus status;
-	private String numeroCartao;
+	private CartaoResponse cartao;
 
 	public PropostaResponse(@NotNull @Valid Proposta proposta) {
 		this.id = proposta.getId();
@@ -25,7 +27,7 @@ public class PropostaResponse {
 		this.salario = proposta.getSalario();
 		this.status = proposta.getStatus();
 		if(!(proposta.getCartao() == null)) {
-			this.numeroCartao = proposta.getCartao().getNumero();
+			this.cartao = new CartaoResponse(proposta.getCartao());
 		}
 	}
 
@@ -57,8 +59,8 @@ public class PropostaResponse {
 		return status;
 	}
 
-	public String getNumeroCartao() {
-		return numeroCartao;
+	public CartaoResponse getCartao() {
+		return cartao;
 	}
 	
 }
