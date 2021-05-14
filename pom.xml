@@ -75,6 +75,12 @@
     		<groupId>org.springframework.security</groupId>
     		<artifactId>spring-security-oauth2-jose</artifactId>
 		</dependency>
+		
+		<!-- Prometheus -->
+		<dependency>
+    		<groupId>io.micrometer</groupId>
+    		<artifactId>micrometer-registry-prometheus</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
