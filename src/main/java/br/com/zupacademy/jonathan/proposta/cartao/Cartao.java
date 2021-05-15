@@ -18,6 +18,7 @@ import javax.validation.constraints.NotNull;
 import br.com.zupacademy.jonathan.proposta.biometria.Biometria;
 import br.com.zupacademy.jonathan.proposta.bloqueio.Bloqueio;
 import br.com.zupacademy.jonathan.proposta.novaproposta.Proposta;
+import br.com.zupacademy.jonathan.proposta.viagem.AvisoViagem;
 
 @Entity
 public class Cartao {
@@ -40,8 +41,8 @@ public class Cartao {
     private Bloqueio bloqueio;
     @Enumerated(value = EnumType.STRING)
     private CartaoStatus status = CartaoStatus.ATIVO;
-	
-	
+    @OneToMany(mappedBy = "cartao", cascade = CascadeType.MERGE)
+    private Set<AvisoViagem> viagens;
 	
 	public Cartao(@NotBlank String numero, @NotBlank String titular, @NotNull LocalDateTime emitidoEm,
 			@NotNull Proposta proposta) {
@@ -85,8 +86,14 @@ public class Cartao {
 	public CartaoStatus getStatus() {
 		return status;
 	}
+	
+	public Set<AvisoViagem> getViagens() {
+		return viagens;
+	}
 
-	public boolean verificarSeCartaoEstaBloqueado(){
+	// métodos abaixo são usados para as regras de negócios
+
+	public boolean verificarSeCartaoEstaBloqueado() {
         return this.status.equals(CartaoStatus.BLOQUEADO);
     }
 
@@ -94,5 +101,10 @@ public class Cartao {
         this.bloqueio = bloqueio;
         this.status = CartaoStatus.BLOQUEADO;
     }
+    
+    public void setViagem(AvisoViagem viagem) {
+		this.viagens.add(viagem);
+		this.status = CartaoStatus.EM_VIAGEM;
+	}
 	
 }
