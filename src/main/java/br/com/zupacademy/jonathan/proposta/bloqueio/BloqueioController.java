@@ -44,7 +44,7 @@ public class BloqueioController {
 		Optional<Cartao> cartao = cartaoRepository.findById(id);
         if(cartao.isEmpty()){
         	logger.warn("Cartão {} não encontrado=", id);
-        	ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cartão não encontrado");
+        	return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cartão não encontrado");
         }
         if(cartao.get().verificarSeCartaoEstaBloqueado()) {
         	logger.warn("Cartão {} já possui bloqueio=", id);
