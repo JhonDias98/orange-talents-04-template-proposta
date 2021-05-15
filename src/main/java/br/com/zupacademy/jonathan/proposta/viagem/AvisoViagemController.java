@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import br.com.zupacademy.jonathan.proposta.cartao.Cartao;
 import br.com.zupacademy.jonathan.proposta.cartao.CartaoRepository;
+import br.com.zupacademy.jonathan.proposta.gateway.cartao.CartaoClient;
 import br.com.zupacademy.jonathan.proposta.utils.ExecutorTransacao;
 
 @RestController
@@ -27,6 +28,8 @@ public class AvisoViagemController {
     private CartaoRepository cartaoRepository;
 	@Autowired
 	private ExecutorTransacao executorTransacao;
+	@Autowired
+	private CartaoClient cartaoClient;
 	
 	private final Logger logger = LoggerFactory.getLogger(AvisoViagemController.class);
 
@@ -41,12 +44,18 @@ public class AvisoViagemController {
         	return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cartão não encontrado");
         }
         
-        AvisoViagem novoAvisoViagem = request.toModel(cartao.get(), servletRequest.getLocalAddr(), 
-        		servletRequest.getHeader("User-Agent"));
-        cartao.get().setViagem(novoAvisoViagem);
-        executorTransacao.atualizaEComita(cartao.get());
-        logger.info("Cartão bloqueado com sucesso");
-		return ResponseEntity.ok().build();
+        try {
+			AvisoViagem novoAvisoViagem = request.toModel(cartao.get(), servletRequest.getLocalAddr(), 
+															servletRequest.getHeader("User-Agent"));
+			cartaoClient.avisarViagem(cartao.get().getNumero(), request);
+			cartao.get().setViagem(novoAvisoViagem);
+			executorTransacao.atualizaEComita(cartao.get());
+			logger.info("Viagem registrada com sucesso!");	
+		} catch (Exception e) {
+			logger.error("Ocorreu um erro {}", e.toString());
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Ocorreu um erro");		
+		}
+        return ResponseEntity.ok().build(); 
 	}
 	
 }

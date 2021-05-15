@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import br.com.zupacademy.jonathan.proposta.bloqueio.BloqueioRequest;
 //import br.com.zupacademy.jonathan.proposta.gateway.cartao.bloqueio.BloqueioClientResponse;
+import br.com.zupacademy.jonathan.proposta.viagem.AvisoViagemRequest;
 
 @FeignClient(value = "cartoes", url = "${cartoes.host}")
 @Component
@@ -22,4 +23,7 @@ public interface CartaoClient {
 
     @PostMapping("/{id}/bloqueios") 
     public void bloqueioCartao(@PathVariable String id, @RequestBody @Valid BloqueioRequest request);
+    
+    @PostMapping("/{id}/avisos") 
+    public void avisarViagem(@PathVariable String id, @RequestBody @Valid AvisoViagemRequest request);
 }
