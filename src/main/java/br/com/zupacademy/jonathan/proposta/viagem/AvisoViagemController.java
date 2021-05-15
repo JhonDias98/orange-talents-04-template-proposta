@@ -34,7 +34,7 @@ public class AvisoViagemController {
 	private final Logger logger = LoggerFactory.getLogger(AvisoViagemController.class);
 
 	@PostMapping("/{idCartao}")
-	public ResponseEntity<?> bloquearCartao(@PathVariable("idCartao") Long id,
+	public ResponseEntity<?> criarAvisoViagem(@PathVariable("idCartao") Long id,
 												HttpServletRequest servletRequest,
 												@RequestBody @Valid AvisoViagemRequest request){
 		
