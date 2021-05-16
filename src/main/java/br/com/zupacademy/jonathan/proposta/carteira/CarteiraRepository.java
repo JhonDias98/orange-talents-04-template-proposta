@@ -6,5 +6,5 @@ import br.com.zupacademy.jonathan.proposta.cartao.Cartao;
 
 public interface CarteiraRepository extends JpaRepository<Carteira, Long>{
 
-	boolean existsByCartaoAndCarteira(Cartao cartao, String carteira);
+	boolean existsByCartaoAndCarteira(Cartao cartao, CarteiraTipo carteira);
 }

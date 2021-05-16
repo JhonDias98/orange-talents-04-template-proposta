@@ -1,5 +1,6 @@
 package br.com.zupacademy.jonathan.proposta.carteira;
 
+import java.net.URI;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -52,15 +53,17 @@ public class CarteiraController {
         	logger.warn("Cartão já associado");
         	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cartão já está associada com a cateira");
         }
-		associarCartao(cartao.get(), request);
-        return ResponseEntity.ok().build();
+		Carteira carteiraCriada = associarCartao(cartao.get(), request);
+		URI uri = uriBuilder.path("/carteiras/{id}").build(carteiraCriada.getId());
+		return ResponseEntity.created(uri).build();
 	}
 	
-	public void associarCartao(Cartao cartao, CarteiraRequest request) {
+	public Carteira associarCartao(Cartao cartao, CarteiraRequest request) {
 		try {
 			CarteiraResponse carteiraResponse = cartaoClient.associarCarteira(cartao.getNumero(), request);
 			Carteira novaCarteira = carteiraResponse.toModel(request, cartao);
 			executorTransacao.salvaEComita(novaCarteira);
+			return novaCarteira;
 		} catch (FeignException.UnprocessableEntity e) {
 			logger.error(" Erro = {}", e.toString());
 			throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,"Falha ao tentar associar o cartão");

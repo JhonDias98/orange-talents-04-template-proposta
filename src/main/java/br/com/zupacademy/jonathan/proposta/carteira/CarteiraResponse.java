@@ -24,10 +24,5 @@ public class CarteiraResponse {
     public Carteira toModel(CarteiraRequest request, Cartao cartao) {
     	return new Carteira(id, request.getEmail(), request.getCarteira(), cartao);
     }
-    
-    @Override
-    public String toString() {
-    	// TODO Auto-generated method stub
-    	return "Resultado: " + resultado + " , id: " + id;
-    }
+
 }

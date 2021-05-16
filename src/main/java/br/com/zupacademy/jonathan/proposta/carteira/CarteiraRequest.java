@@ -1,11 +1,16 @@
 package br.com.zupacademy.jonathan.proposta.carteira;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 public class CarteiraRequest {
 
+	@NotBlank
 	private String email;
-	private String carteira;
+	@NotNull
+	private CarteiraTipo carteira;
 	
-	public CarteiraRequest(String email, String carteira) {
+	public CarteiraRequest(String email, CarteiraTipo carteira) {
 		this.email = email;
 		this.carteira = carteira;
 	}
@@ -14,7 +19,7 @@ public class CarteiraRequest {
 		return email;
 	}
 
-	public String getCarteira() {
+	public CarteiraTipo getCarteira() {
 		return carteira;
 	}
 	
