@@ -29,7 +29,7 @@ public class CartaoScheduled {
 	
 	@Scheduled(fixedDelayString = "${periodicidade.executa-operacao}")
 	@Transactional
-    private void executaOperacao() {
+    public void executaOperacao() {
 		List<Proposta> propostas = propostaRepository.findByStatusAndCartaoIsNull(PropostaStatus.ELEGIVEL);
 		
 		if(propostas.isEmpty()) {
