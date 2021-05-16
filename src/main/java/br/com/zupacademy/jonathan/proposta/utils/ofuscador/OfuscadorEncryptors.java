@@ -14,10 +14,11 @@ public class OfuscadorEncryptors implements AttributeConverter<String, String>{
 	 */
 	@Override
 	public String convertToDatabaseColumn(String documento) {
-		//return Encryptors.text("pass", "12345678").encrypt(documento);
-		
-		// queryableText é recomendando quando precisa de consultas
-		return Encryptors.queryableText("pass", "12345678").encrypt(documento);
+		try {
+           return Encryptors.queryableText("${proposta.ofuscar.dados}", "12345678").encrypt(documento);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 	}
 
 	/**
@@ -26,12 +27,11 @@ public class OfuscadorEncryptors implements AttributeConverter<String, String>{
 	 */
 	@Override
 	public String convertToEntityAttribute(String documento) {
-		//String ofuscado = Encryptors.text("pass", "12345678").decrypt(documento);
-		
-		// queryableText é recomendando quando precisa de consultas
-//		String ofuscado = Encryptors.queryableText("pass", "12345678").decrypt(documento);
-//		return String.format("%10s", ofuscado.substring(ofuscado.length() - 4)).replace(' ', '*');
-		return Encryptors.queryableText("pass", "12345678").decrypt(documento);
+		try {
+           return Encryptors.queryableText("${proposta.ofuscar.dados}", "12345678").decrypt(documento);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }	
 	}
 	
 }
