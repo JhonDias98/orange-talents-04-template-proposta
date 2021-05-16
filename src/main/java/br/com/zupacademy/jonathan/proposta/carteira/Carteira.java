@@ -28,7 +28,7 @@ public class Carteira {
 	@ManyToOne
 	private Cartao cartao;
 	
-	public Carteira(@NotBlank String idAssociacao, @NotBlank String email, @NotBlank CarteiraTipo carteira, Cartao cartao) {
+	public Carteira(@NotBlank String idAssociacao, @NotBlank String email, @NotNull CarteiraTipo carteira, Cartao cartao) {
 		this.idAssociacao = idAssociacao;
 		this.email = email;
 		this.carteira = carteira;
